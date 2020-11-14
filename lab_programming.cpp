@@ -57,6 +57,11 @@ int counting_of_answer(vector<int> &arr) {
     return answer;
 }
 
+//FUNC FOR LB 11
+double lab11_recursion(double n) {
+    if (n == 2) return 1 / n;
+    else return lab11_recursion(n - 2) + (n - 1) / n;
+}
 
 //MAIN FUNC FOR LB
 void lab17_9() {
@@ -139,10 +144,9 @@ void lab8_6_v() {
 
     std::cout << "SUM = " << sum << std::endl;
 }
-void lab9_23_17() {
+void lab10_23_17() {
     
     int len_A, len_B;
-    int answer;
     std::cout << "INPUT LEN A: ";
     std::cin >> len_A;
     std::cout << "INPUT LEN B: ";
@@ -156,6 +160,13 @@ void lab9_23_17() {
     
     std::cout << "Answer for A: " << counting_of_answer(A) << '\n';
     std::cout << "Answer for B: " << counting_of_answer(B) << '\n';  
+}
+void lab11() {
+//VAR 17 LAB 
+    double n;
+    std::cout << "INPUT N: ";
+    std::cin >> n;
+    std::cout << "ANSWER: " << lab11_recursion(n) << '\n';
 }
 
 class Test {
@@ -194,6 +205,7 @@ private:
 
 int main()
 {  
+
     system("pause");
     return 0;
 }
