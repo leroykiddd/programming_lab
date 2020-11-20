@@ -58,9 +58,9 @@ int counting_of_answer(vector<int> &arr) {
 }
 
 //FUNC FOR LB 11
-double lab11_recursion(double n) {
-    if (n == 2) return 1 / n;
-    else return lab11_recursion(n - 2) + (n - 1) / n;
+double lab11_recursion(int n) {
+    if (n == 2) return 1. / n;
+    else return lab11_recursion(n - 2.) + (n - 1.) / n;
 }
 
 //MAIN FUNC FOR LB
@@ -163,10 +163,30 @@ void lab10_23_17() {
 }
 void lab11() {
 //VAR 17 LAB 
-    double n;
+    int n;
     std::cout << "INPUT N: ";
     std::cin >> n;
     std::cout << "ANSWER: " << lab11_recursion(n) << '\n';
+}
+void lab12() {
+    //LAB 25 17
+    std::string str;
+    std::cout << "INPUT STRING: ";
+    std::getline(std::cin, str);
+    bool have = false;
+    for (int i = 0; i < str.size(); ++i) {
+        if (have && str[i] == '*') str[i] = '+';
+        if (i == 0 && str[i] == '*') {
+            have = true;
+        }
+        if(!have && str[i - 1] == ' ' && str[i] == '*') have = true;
+    }
+
+    std::cout << str << '\n';
+}
+void lab12_defense() {
+    //LAB 26 17
+
 }
 
 class Test {
@@ -205,7 +225,9 @@ private:
 
 int main()
 {  
-
+    while (true) {
+        lab12();
+    }
     system("pause");
     return 0;
 }
