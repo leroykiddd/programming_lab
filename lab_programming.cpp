@@ -170,23 +170,35 @@ void lab11() {
 }
 void lab12() {
     //LAB 25 17
+    /*Введите строку. Если в данной строке есть слова,
+    начинающиеся на символ «*»,
+    то в остальной части строки замените символ «*» на символ «+».*/
     std::string str;
     std::cout << "INPUT STRING: ";
     std::getline(std::cin, str);
     bool have = false;
     for (int i = 0; i < str.size(); ++i) {
         if (have && str[i] == '*') str[i] = '+';
-        if (i == 0 && str[i] == '*') {
-            have = true;
-        }
-        if(!have && str[i - 1] == ' ' && str[i] == '*') have = true;
+        if ((!have && str[i] == '*' && i != 0 && str[i - 1] == ' ') ||
+            (i == 0 && str[i] == '*')
+            ) have = true;
     }
 
     std::cout << str << '\n';
 }
 void lab12_defense() {
     //LAB 26 17
+    /*Ввести текст. Заменить все слова «ЭТО» на слово «ТО».*/
+    std::string str;
+    std::cout << "INPUT STRING: ";
+    std::getline(std::cin, str);
 
+    std::string answer;
+    for (int i = 2; i < str.size(); ++i) {
+        if (str[i] == 'о' && str[i - 1] == 'т' && str[i - 2] == 'э') {
+            answer.insert(answer.size(), "то");
+        } 
+    }
 }
 
 class Test {
@@ -223,8 +235,7 @@ private:
 
 };
 
-int main()
-{  
+int main() {  
     while (true) {
         lab12();
     }
