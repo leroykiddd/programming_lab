@@ -2,6 +2,7 @@
 #include <vector>
 #include <time.h>
 #include <string>
+#include <fstream>
 
 using std::vector;
 
@@ -169,10 +170,7 @@ void lab11() {
     std::cout << "ANSWER: " << lab11_recursion(n) << '\n';
 }
 void lab12() {
-    //LAB 25 17
-    /*Введите строку. Если в данной строке есть слова,
-    начинающиеся на символ «*»,
-    то в остальной части строки замените символ «*» на символ «+».*/
+    // * -> +
     std::string str;
     std::cout << "INPUT STRING: ";
     std::getline(std::cin, str);
@@ -187,20 +185,63 @@ void lab12() {
     std::cout << str << '\n';
 }
 void lab12_defense() {
-    //LAB 26 17
-    /*Ввести текст. Заменить все слова «ЭТО» на слово «ТО».*/
-    std::string str;
-    std::cout << "INPUT STRING: ";
-    std::getline(std::cin, str);
-
-    std::string answer;
-    for (int i = 2; i < str.size(); ++i) {
-        if (str[i] == 'о' && str[i - 1] == 'т' && str[i - 2] == 'э') {
-            answer.insert(answer.size(), "то");
-        } 
-    }
+   
 }
+void lab13() {
+    //work with file (input, output)
+    const char* file_name = "f.txt";
+    double answer = 1;
 
+    std::ofstream out_file(file_name);
+    if (out_file.is_open()) {
+        std::cout << "Can't open file!";
+        return;
+    }
+    int count_number;
+    double num;
+    std::cout << "How many numbers do you want to enter: ";
+    std::cin >> count_number;
+    for (int i = 0; i < count_number; ++i) {
+        std::cout << "Input number: ";
+        std::cin >> num;
+        out_file << num << std::endl;
+    }
+    out_file.close();
+    
+    
+    std::string str_of_num;
+    std::ifstream in_file(file_name);
+    if (in_file.is_open()) {
+        while (std::getline(in_file, str_of_num)) {
+            answer *= std::atof(str_of_num.c_str());
+        }
+    }
+    else {
+        std::cout << "Can't open file\n";
+        return;
+    }
+    in_file.close();
+    std::cout << "Answer: " << answer << '\n';
+}
+void lab13_defense() {
+    const char* file_name = "f.txt";
+
+    std::ofstream out_file(file_name, std::ostream::app);
+    if (out_file.is_open()) {
+        std::string str_1, str_2, str_3;
+        std::cout << "Input e: ";
+        std::getline(std::cin, str_1);
+        std::cout << "Input n: ";
+        std::getline(std::cin, str_2);
+        std::cout << "Input d: ";
+        std::getline(std::cin, str_3);
+        out_file << str_1;
+        out_file << str_2;
+        out_file << str_3;
+    }
+    else std::cout << "\nCan't open file!\n";
+
+}
 class Test {
 
 public:
@@ -235,10 +276,8 @@ private:
 
 };
 
-int main() {  
-    while (true) {
-        lab12();
-    }
+int main() {
+    lab13_defense();
     system("pause");
     return 0;
 }
