@@ -115,8 +115,6 @@ void lab8_6_v() {
     std::cout << "\nARRAY BEFORE:\n";
     for (int i = 0; i < n; ++i) {
         for (int k = 0; k < n; ++k) {
-            char ch = '\t';
-            std::string s = "\t";
             std::cout << arr[i][k] << '\t';
         }
         std::cout << std::endl;
@@ -277,7 +275,7 @@ private:
 };
 
 int main() {
-    lab13_defense();
+    std::cout << "Work with git test\n";
     system("pause");
     return 0;
 }
