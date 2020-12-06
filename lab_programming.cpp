@@ -193,7 +193,7 @@ void lab13() {
     double answer = 1;
 
     std::ofstream out_file(file_name);
-    if (out_file.is_open()) {
+    if (!out_file.is_open()) {
         std::cout << "Can't open file!";
         return;
     }
@@ -215,8 +215,7 @@ void lab13() {
         while (std::getline(in_file, str_of_num)) {
             answer *= std::atof(str_of_num.c_str());
         }
-    }
-    else {
+    } else {
         std::cout << "Can't open file\n";
         return;
     }
@@ -277,7 +276,7 @@ private:
 };
 
 int main() {
-    lab13_defense();
+    std:cout << "Hello!\n";
     system("pause");
     return 0;
 }
