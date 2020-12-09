@@ -246,7 +246,7 @@ using std::vector;
 using std::string;
 
 const vector<string> ZNAKI = { "dafault", "Козерог","Водолей","Рыбы","Овен","Телец","Близнецы",
-                                  "Рак","Лев","Дева","Весы","Скорпион","Стрелец" };
+                               "Рак","Лев","Дева","Весы","Скорпион","Стрелец" };
 class Znak {
     string firstName;
     string lastName;
@@ -306,7 +306,7 @@ void setUserData(int id, vector<Znak>& arr) {
     dateOfB.push_back(int_value);
     arr[id].setdateOfB(dateOfB);
 }
-void showUsers(vector<Znak> &users) {
+void showUsers(vector<Znak>& users) {
     for (int i = 0; i < users.size(); ++i) {
         std::cout << "\nUSER №" << i << '\n';
         std::cout << "Знак: " << users[i].getZnak() << '\n';
@@ -330,32 +330,84 @@ void showUsersMonth(vector<Znak> const& users, int month) {
 
     if (!have) std::cout << "Нет таких пользователей.\n";
 }
-void saveData(vector<Znak> const& users, const char* file_name) {
+void saveDataToFile(vector<Znak> const& users, const char* file_name) {
     std::ofstream out_file(file_name);
     if (out_file.is_open()) {
-        
+        for (int i = 0; i < users.size(); ++i) {
+            string user = "";
+            vector<int> dateOfB = users[i].getdateOfB();
+            user = users[i].getFirstName() + " "
+                + users[i].getLastName() + " "
+                + std::to_string(users[i].getIntZnak()) + " "
+                + std::to_string(dateOfB[0]) + " " + std::to_string(dateOfB[1]) + " " + std::to_string(dateOfB[2]);
+            out_file << user << '\n';
+            /*out_file << users[i].getFirstName() << '\n';
+            out_file << users[i].getLastName() << '\n';
+            out_file << std::to_string(users[i].getIntZnak()) << '\n';
+            out_file << std::to_string(dateOfB[0]) << '\n';
+            out_file << std::to_string(dateOfB[1]) << '\n';
+            out_file << std::to_string(dateOfB[2]) << '\n';*/
+        }
+        out_file.close();
     }
+    else {
+        std::cout << "Cant open file!\n";
+    }
+}
+void loadDataFromFile(vector<Znak>& users, const char* file_name) {
+    std::ifstream in_file(file_name);
+    if (in_file.is_open()) {
+        string str;
+        while (std::getline(in_file, str)) {
+            string data;
+            vector<string> user;
+            for (int i = 0; i < str.size(); ++i) {
+                if (str[i] != ' ' && i + 1 != str.size()) {
+                    data += str[i];
+                }
+                if (str[i] == ' ' || i + 1 == str.size()) {
+                    user.push_back(data);
+                    data = "";
+                }
+            }
+            string firstName = user[0];
+            string lastName = user[1];
+            int znak_id = std::atoi(user[2].c_str());
+            vector<int> dateOfB = { std::atoi(user[3].c_str()),
+                                   std::atoi(user[4].c_str()),
+                                   std::atoi(user[5].c_str()) };
+            Znak new_user(firstName, lastName, dateOfB, znak_id);
+            users.push_back(new_user);
+        }
+    }
+    in_file.close();
 }
 
 void lab29() {
-    vector<Znak> users;
+    vector<Znak> users; const char* file_name = "test.txt";
     while (true) {
         std::cout << "Что вы хотите сделать?"
             "\n1: Добавить пользователей."
             "\n2: Редактировать пользователя."
             "\n3: Посмотреть пользователей."
-            "\n4: Посмотреть пользователей по месяцу рождения." 
+            "\n4: Посмотреть пользователей по месяцу рождения."
             "\n5: Удалить пользователя."
-            "\n6: Выход."
+            "\n6: Загрузить данные из файла."
+            "\n7: Сохранить данные в файл."
+            "\n8: Сорторовать список пользователей по знакам зодиака."
+            "\n9: Выход."
             "\nОтвет: ";
 
         int answer;
         std::cin >> answer;
-        if (answer == 6) break;
-        if (users.size() == 0 && (answer == 2 || answer == 3 || answer == 4 || answer == 5)) {
+        if (answer == 9) break;
+        if (answer == 6) loadDataFromFile(users, file_name);
+        if (users.size() == 0 && (answer == 2 || answer == 3 || answer == 4 || answer == 5 || answer == 7 || answer == 8)) {
             std::cout << "Пользователи еще не добавлены!\n\n";
         }
         else {
+            if (answer == 8) std::sort(users.begin(), users.end());
+            if (answer == 7) saveDataToFile(users, file_name);
             if (answer == 5) {
                 showUsers(users);
                 int answerId;
@@ -370,7 +422,7 @@ void lab29() {
                 showUsersMonth(users, month);
             }
             if (answer == 3) {
-                
+
                 showUsers(users);
             }
             if (answer == 2) {
@@ -393,10 +445,10 @@ void lab29() {
                 setUserData(users.size() - 1, users);
                 std::cout << '\n';
             }
-            std::sort(users.begin(), users.end());
         }
+
     }
-} 
+}
 
 int main() {
     setlocale(LC_ALL, "Russian");
