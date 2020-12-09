@@ -3,6 +3,7 @@
 #include <time.h>
 #include <string>
 #include <fstream>
+#include <algorithm>
 
 using std::vector;
 
@@ -244,31 +245,36 @@ void lab13_defense() {
 using std::vector;
 using std::string;
 
+const vector<string> ZNAKI = { "dafault", "Козерог","Водолей","Рыбы","Овен","Телец","Близнецы",
+                                  "Рак","Лев","Дева","Весы","Скорпион","Стрелец" };
 class Znak {
     string firstName;
     string lastName;
     vector<int> dateOfB;
-    string znak;
+    int znak;
 
 public:
-    const vector<string> ZNAKI = { "dafault", "Козерог","Водолей","Рыбы","Овен","Телец","Близнецы",
-                                  "Рак","Лев","Дева","Весы","Скорпион","Стрелец" };
-
     Znak(string firstName, string lastName, vector<int> dateOfB, int znakId) {
         this->firstName = firstName;
         this->lastName = lastName;
         this->dateOfB = dateOfB;
-        this->znak = ZNAKI[znakId];
+        this->znak = znakId;
+    }
+
+    bool operator<(const Znak& rhs)
+    {
+        return this->getIntZnak() < rhs.getIntZnak();
     }
 
     [[nodiscard]] string getFirstName() const noexcept { return this->firstName; }
     [[nodiscard]] string getLastName() const noexcept { return this->lastName; }
-    [[nodiscard]] string getZnak() const noexcept { return this->znak; }
+    [[nodiscard]] string getZnak() const noexcept { return ZNAKI[this->znak]; }
+    [[nodiscard]] int getIntZnak() const noexcept { return this->znak; }
     [[nodiscard]] vector<int> getdateOfB() const noexcept { return this->dateOfB; }
 
     void setFirstName(string value) { this->firstName = value; }
     void setLastName(string value) { this->lastName = value; }
-    void setZnak(int value) { this->znak = ZNAKI[value]; }
+    void setZnak(int value) { this->znak = value; }
     void setdateOfB(vector<int> array) { this->dateOfB = array; }
 
 };
@@ -300,49 +306,101 @@ void setUserData(int id, vector<Znak>& arr) {
     dateOfB.push_back(int_value);
     arr[id].setdateOfB(dateOfB);
 }
+void showUsers(vector<Znak> &users) {
+    for (int i = 0; i < users.size(); ++i) {
+        std::cout << "\nUSER №" << i << '\n';
+        std::cout << "Знак: " << users[i].getZnak() << '\n';
+        std::cout << "Имя и фамилия: " << users[i].getFirstName() << " " << users[i].getLastName() << '\n';
+        vector <int> date = users[i].getdateOfB();
+        std::cout << "Дата рождения: " << date[0] << " " << date[1] << " " << date[2] << "\n\n";
+    }
+}
+void showUsersMonth(vector<Znak> const& users, int month) {
+    bool have = false;
+    for (int i = 0; i < users.size(); ++i) {
+        if ((users[i].getdateOfB())[1] == month) {
+            have = true;
+            std::cout << "\nUSER №" << i << '\n';
+            std::cout << "Знак: " << users[i].getZnak() << '\n';
+            std::cout << "Имя и фамилия: " << users[i].getFirstName() << " " << users[i].getLastName() << '\n';
+            vector <int> date = users[i].getdateOfB();
+            std::cout << "Дата рождения: " << date[0] << " " << date[1] << " " << date[2] << "\n\n";
+        }
+    }
+
+    if (!have) std::cout << "Нет таких пользователей.\n";
+}
+void saveData(vector<Znak> const& users, const char* file_name) {
+    std::ofstream out_file(file_name);
+    if (out_file.is_open()) {
+        
+    }
+}
 
 void lab29() {
     vector<Znak> users;
     while (true) {
         std::cout << "Что вы хотите сделать?"
-            "\n1: Добавить пользователя."
+            "\n1: Добавить пользователей."
             "\n2: Редактировать пользователя."
-            "\n3: Выход."
+            "\n3: Посмотреть пользователей."
+            "\n4: Посмотреть пользователей по месяцу рождения." 
+            "\n5: Удалить пользователя."
+            "\n6: Выход."
             "\nОтвет: ";
 
         int answer;
         std::cin >> answer;
-        if (answer == 3) break;
-        if (answer == 2) {
-            if (users.size() == 0) {
-                std::cout << "Пользователи еще не были добавлены!\n";
+        if (answer == 6) break;
+        if (users.size() == 0 && (answer == 2 || answer == 3 || answer == 4 || answer == 5)) {
+            std::cout << "Пользователи еще не добавлены!\n\n";
+        }
+        else {
+            if (answer == 5) {
+                showUsers(users);
+                int answerId;
+                std::cout << "Какого пользователя хотите удалить? (введите его номер): ";
+                std::cin >> answerId;
+                users.erase(users.begin() + answerId);
             }
-            else {
-                for (int i = 0; i < users.size(); ++i) {
-                    std::cout << "USER №" << i << '\n';
-                    std::cout << "Знак: " << users[i].getZnak() << '\n';
-                    std::cout << "Имя и фамилия: " << users[i].getFirstName() << " " << users[i].getLastName() << '\n';
-                    vector <int> date = users[i].getdateOfB();
-                    std::cout << "Дата рождения: " << date[0] << " " << date[1] << " " << date[2] << '\n';
-                }
+            if (answer == 4) {
+                int month;
+                std::cout << "Введите месяц: ";
+                std::cin >> month;
+                showUsersMonth(users, month);
+            }
+            if (answer == 3) {
+                
+                showUsers(users);
+            }
+            if (answer == 2) {
+                showUsers(users);
                 int answerId;
                 std::cout << "Какого пользователя хотите редактировать? (введите его номер): ";
                 std::cin >> answerId;
                 setUserData(answerId, users);
             }
         }
+
         if (answer == 1) {
-            vector<int> dateOfB = { 0, 0, 0 };
-            Znak newUser("default", "default", dateOfB, 0);
-            users.push_back(newUser);
-            setUserData(users.size() - 1, users);
+            int quantity = 0;
+            std::cout << "Сколько пользователей добавить? ";
+            std::cin >> quantity;
+            for (int i = 0; i < quantity; ++i) {
+                vector<int> dateOfB = { 0, 0, 0 };
+                Znak newUser("default", "default", dateOfB, 0);
+                users.push_back(newUser);
+                setUserData(users.size() - 1, users);
+                std::cout << '\n';
+            }
+            std::sort(users.begin(), users.end());
         }
     }
-}
+} 
 
 int main() {
     setlocale(LC_ALL, "Russian");
-    
+    lab29();
     system("pause");
     return 0;
 }
